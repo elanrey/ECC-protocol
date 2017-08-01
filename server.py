@@ -1,6 +1,6 @@
 from utils import *
 
-file = open('CertUser','rb')
+file = open('CertServer','rb')
 
 array = []
 byte = file.read(32)
@@ -58,8 +58,3 @@ for x in byte:
 ese = arrayToBytes(array)
 printData('ese:', ese)
 
-data = getVar(32, 'data')
-printData('data:', data)
-ecc.encryptData(privateK)
-data = getVar(32, 'data')
-printData('data:', data)

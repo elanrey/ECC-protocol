@@ -1,54 +1,61 @@
 from utils import *
-import uuid
 
-#Numeros aleatorios
+#Configura puerto serial
+configSerial('/dev/cu.usbserial-A50285BI')
+
+#Obtener llaves pública y privada
+file = open('keys','rb')
+
+array = []
+byte = file.read(32)
+for x in byte:
+    array.append(x)
+privateK = arrayToBytes(array)
+printData('privK:', privateK)
+
+array = []
+byte = file.read(32)
+for x in byte:
+    array.append(x)
+publicKx = arrayToBytes(array)
+txData(publicKx)
+printData('pubKx:', publicKx)
+
+array = []
+byte = file.read(32)
+for x in byte:
+    array.append(x)
+publicKy = arrayToBytes(array)
+txData(publicKy)
+printData('pubKy:', publicKy)
+
+#Genera numeros aleatorios
 ecc.getRandom()
-randomNum = getVar(32, 'randomN')
-printData('random: ', randomNum)
+random = getVar(32, 'randomNum')
+printData('random:', random)
 
-#Llaves R
-ecc.makeKeys()
+#Recibe llave pública
+pubKx = rxData(32)
+printData('exPubKx:', pubKx)
+pubKy = rxData(32)
+printData('exPubKy:', pubKy)
 
-publicKx = getVar(32, 'publicKx')
-printData('Rx: ', publicKx)
+#Genera hash de la llave pública externa
+array = []
+array.extend(pubKx)
+array.extend(pubKy)
+keyHash = arrayToBytes(array)
+ecc.getHash(keyHash, 64)
+keyHash = getVar(32, 'hashNum')
+printData('hash:', keyHash)
 
-publicKy = getVar(32, 'publicKy')
-printData('Ry: ', publicKy)
-
-#Get Id
-id = getData(16)
-printData('id: ', id)
-
-rand = getData(32)
-printData('rand: ', rand)
-
-#Get Qx
-pubKx = getData(32)
-printData('Qx: ', pubKx)
-
-#Get Qy
-pubKy = getData(32)
-printData('Qy: ', pubKy)
-
-#Id+Qx
-con = id+pubKx 
-ecc.setData(con, 48)
-data = getVar(32, 'data')
-printData('id+Qx: ', data)
-
-#Hash ID+Qx
-ecc.getHash(48)
-hash = getVar(32, 'hashN')
-printData('hash(id+Qx): ', hash)
-
-ecc.sign()
+#Firma de llave pública externa
+ecc.sign(privateK, random, keyHash)
 
 ere = getVar(32, 'ere')
-printData('r: ', ere)
-sendData(ere)
+printData('ere:', ere)
+txData(ere)
 
 ese = getVar(32, 'ese')
-printData('s: ', ese)
-sendData(ese)
-
-s.close()
+printData('ese:', ese)
+txData(ese)
