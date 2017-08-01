@@ -9,7 +9,7 @@ Generación de Certificados
                       Recibir llave pública R  <<< <<< <<< <<< <<<  Enviar llave pública (R)
                          Recibir firma (r, s)  <<< <<< <<< <<< <<<  Enviar firma (r, s)
                  Guardar (d, Q, R, e, (r, s))
-===
+___
 
 Autenticación Mutua y Acuerdo de Llaves
 ---
