@@ -17,8 +17,8 @@ Autenticación Mutua y Acuerdo de Llaves
             Obtener (du, Qu, R, eu, (ru, su))               Obtener (ds, Qs, R, es, (rs, ss))
         Cifrar datos Cu = E(Qu, eu, (ru, su))               Cifrar datos Cs = E(Qs, es, (rs, ss))
                     Recibir datos cifrados Cs     <<<<<     Enviar datos cifrados Cs
-                     Enviar datos cifrados Cu     >>>>>     Recibir datos cifrados Cu
-                Descifrar datos (Qs, es, (rs, ss)) = D(R, Cs)               Descifrar datos (Qu, eu, (ru, su)) = D(R, Cu)
+                     Enviar datos cifrados Cu     >>>>>     Recibir datos cifrados Cu 
+                     Descifrar datos D(R, Cs)               Descifrar datos D(R, Cu)
                Verificar firma (es, (rs, ss))               Verificar firma (eu, (ru, su))
-     Si firma == OK => continua, si no => termina               Si firma == OK => continua, si no => termina
+    Si firma OK => continua, si no => termina               Si firma OK => continua, si no => termina
            Generar llave mutua (Qk = du X Qs)               Generar llave mutua (Qk = ds X Qu)
