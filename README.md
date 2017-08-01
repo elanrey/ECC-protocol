@@ -1,5 +1,5 @@
 Generación de Certificados
-==========================
+---
                              Usuario/Servidor         Tx/Rx         Autoridad certificadora
                  Generar números aleatorios d                       Generar números aleatorios c
                      Generar llaves Q = d X P                       Obtener llaves (R, k)
@@ -9,10 +9,10 @@ Generación de Certificados
                       Recibir llave pública R  <<< <<< <<< <<< <<<  Enviar llave pública (R)
                          Recibir firma (r, s)  <<< <<< <<< <<< <<<  Enviar firma (r, s)
                  Guardar (d, Q, R, e, (r, s))
-______________________________________________________________________________________________________________________________
+===
 
 Autenticación Mutua y Acuerdo de Llaves
--------------------------------------
+---
                                       Usuario         Tx/Rx         Servidor
             Obtener (du, Qu, R, eu, (ru, su))                       Obtener (ds, Qs, R, es, (rs, ss))
         Cifrar datos Cu = E(Qu, eu, (ru, su))                       Cifrar datos Cs = E(Qs, es, (rs, ss))
