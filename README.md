@@ -5,7 +5,7 @@ Generación de Certificados
                      Generar llaves Q = d X P               Obtener llaves (R, k)
                        Enviar llave pública Q     >>>>>     Recibir llave pública Q
                         Generar hash e = H(Q)               Generar hash e = H(Q)
-                                                            Generar firma (r, s) = (e + kc)
+                                                            Generar firma (r, s)
                       Recibir llave pública R     <<<<<     Enviar llave pública (R)
                          Recibir firma (r, s)     <<<<<     Enviar firma (r, s)
                  Guardar (d, Q, R, e, (r, s))
