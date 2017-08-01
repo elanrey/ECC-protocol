@@ -1,3 +1,4 @@
+___
 Generación de Certificados
 ---
                              Usuario/Servidor         Tx/Rx         Autoridad certificadora
@@ -22,3 +23,4 @@ Autenticación Mutua y Acuerdo de Llaves
                Verificar firma (es, (rs, ss))                       Verificar firma (eu, (ru, su))
      Si firma OK => continua si no => termina                       Si firma OK => continua si no => termina
            Generar llave mutua (Qk = du X Qs)                       Generar llave mutua (Qk = ds X Qu)
+___
