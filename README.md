@@ -12,7 +12,7 @@ Generación de Certificados
 ______________________________________________________________________________________________________________________________
 
 Autenticación Mutua y Acuerdo de Llaves
-=======================================
+-------------------------------------
                                       Usuario         Tx/Rx         Servidor
             Obtener (du, Qu, R, eu, (ru, su))                       Obtener (ds, Qs, R, es, (rs, ss))
         Cifrar datos Cu = E(Qu, eu, (ru, su))                       Cifrar datos Cs = E(Qs, es, (rs, ss))
