@@ -2,7 +2,10 @@ from utils import *
 
 #Configura puerto serial
 configSerial('/dev/cu.usbserial-A50285BI')
+#Abre archivo
 file = open('CertServer','rb')
+
+print()
 
 array = []
 byte = file.read(32)
@@ -17,6 +20,8 @@ for x in byte:
     array.append(x)
 mainPubKy = arrayToBytes(array)
 printData('mainPubKy:', mainPubKy)
+
+print()
 
 array = []
 byte = file.read(32)
@@ -53,6 +58,8 @@ for x in byte:
 ese = arrayToBytes(array)
 printData('ese:', ese)
 
+print()
+
 array = []
 encDataS = rxData(32)
 ecc.setData(encDataS, 0, 16)
@@ -62,7 +69,7 @@ ecc.setData(encDataS, 16, 32)
 ecc.decryptData(mainPubKx)
 array.extend(getVar(16, 'data'))
 UpubKx = arrayToBytes(array)
-printData('UpubKx:', UpubKx)
+printData('User pubKx:', UpubKx)
 
 array = []
 encDataS = rxData(32)
@@ -73,7 +80,7 @@ ecc.setData(encDataS, 16, 32)
 ecc.decryptData(mainPubKx)
 array.extend(getVar(16, 'data'))
 UpubKy = arrayToBytes(array)
-printData('UpubKy:', UpubKy)
+printData('User pubKy:', UpubKy)
 
 array = []
 encDataS = rxData(32)
@@ -84,7 +91,7 @@ ecc.setData(encDataS, 16, 32)
 ecc.decryptData(mainPubKx)
 array.extend(getVar(16, 'data'))
 Uere = arrayToBytes(array)
-printData('Uere:', Uere)
+printData('User ere:', Uere)
 
 array = []
 encDataS = rxData(32)
@@ -95,7 +102,7 @@ ecc.setData(encDataS, 16, 32)
 ecc.decryptData(mainPubKx)
 array.extend(getVar(16, 'data'))
 Uese = arrayToBytes(array)
-printData('Uese:', Uese)
+printData('User ese:', Uese)
 
 #Cifra publicKx
 array = []
@@ -148,9 +155,12 @@ array.extend(UpubKy)
 keyHash = arrayToBytes(array)
 ecc.getHash(keyHash, 64)
 keyHash = getVar(32, 'hashNum')
-printData('hash:', keyHash)
+
+print()
 
 if ecc.verify(mainPubKx, mainPubKy, keyHash, Uere, Uese):
     ecc.getSharedKey(UpubKx, UpubKy, privateK)
     sharedKey = getVar(32, 'sharedK')
     printData('Shared Key:', sharedKey)
+
+print()

@@ -2,8 +2,10 @@ from utils import *
 
 #Configura puerto serial
 configSerial('/dev/cu.usbserial-7')
-
+#Abre archivo
 file = open('CertUser','rb')
+
+print()
 
 array = []
 byte = file.read(32)
@@ -18,6 +20,8 @@ for x in byte:
     array.append(x)
 mainPubKy = arrayToBytes(array)
 printData('mainPubKy:', mainPubKy)
+
+print()
 
 array = []
 byte = file.read(32)
@@ -53,6 +57,8 @@ for x in byte:
     array.append(x)
 ese = arrayToBytes(array)
 printData('ese:', ese)
+
+print()
 
 #Cifra publicKx
 array = []
@@ -107,7 +113,7 @@ ecc.setData(encDataS, 16, 32)
 ecc.decryptData(mainPubKx)
 array.extend(getVar(16, 'data'))
 SpubKx = arrayToBytes(array)
-printData('SpubKx:', SpubKx)
+printData('Server pubKx:', SpubKx)
 
 array = []
 encDataS = rxData(32)
@@ -118,7 +124,7 @@ ecc.setData(encDataS, 16, 32)
 ecc.decryptData(mainPubKx)
 array.extend(getVar(16, 'data'))
 SpubKy = arrayToBytes(array)
-printData('SpubKy:', SpubKy)
+printData('Server pubKy:', SpubKy)
 
 array = []
 encDataS = rxData(32)
@@ -129,7 +135,7 @@ ecc.setData(encDataS, 16, 32)
 ecc.decryptData(mainPubKx)
 array.extend(getVar(16, 'data'))
 Sere = arrayToBytes(array)
-printData('Sere:', Sere)
+printData('Server ere:', Sere)
 
 array = []
 encDataS = rxData(32)
@@ -140,7 +146,7 @@ ecc.setData(encDataS, 16, 32)
 ecc.decryptData(mainPubKx)
 array.extend(getVar(16, 'data'))
 Sese = arrayToBytes(array)
-printData('Sese:', Sese)
+printData('Server ese:', Sese)
 
 #Genera hash de la llave pública externa
 array = []
@@ -149,9 +155,12 @@ array.extend(SpubKy)
 keyHash = arrayToBytes(array)
 ecc.getHash(keyHash, 64)
 keyHash = getVar(32, 'hashNum')
-printData('hash:', keyHash)
+
+print()
 
 if ecc.verify(mainPubKx, mainPubKy, keyHash, Sere, Sese):
     ecc.getSharedKey(SpubKx, SpubKy, privateK)
     sharedKey = getVar(32, 'sharedK')
     printData('Shared Key:', sharedKey)
+
+print()
