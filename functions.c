@@ -12,6 +12,7 @@ uint8_t ese[NUM_ECC_DIGITS];
 uint8_t publicKx[NUM_ECC_DIGITS];
 uint8_t publicKy[NUM_ECC_DIGITS];
 uint8_t privateK[NUM_ECC_DIGITS];
+uint8_t sharedK[NUM_ECC_DIGITS];
 uint8_t randomNum[NUM_ECC_DIGITS];
 uint8_t hashNum[NUM_ECC_DIGITS];
 uint8_t i;
@@ -20,7 +21,9 @@ void setData(uint8_t input[], uint8_t ini, uint8_t fin)
 {
 	uint8_t num = fin - ini;
 	for(i=0; i<num; i++)
+	{
 		data[i] = input[ini+i];
+	}
 }
 
 void getRandom()
@@ -69,12 +72,22 @@ uint8_t sign(uint8_t privK[], uint8_t random[], uint8_t hash[])
 	return ecdsa_sign(ere, ese, privK, random, hash);
 }
 
-uint8_t verify(uint8_t pubKx[], uint8_t pubKy[], uint8_t hash[])
+uint8_t verify(uint8_t pubKx[], uint8_t pubKy[], uint8_t hash[], uint8_t r[], uint8_t s[])
 {
 	for(i=0; i<NUM_ECC_DIGITS; i++)
 	{
 		publicK.x[i] = pubKx[i];
 		publicK.y[i] = pubKy[i];
 	}
-	return ecdsa_verify(&publicK, hash, ere, ese);
+	return ecdsa_verify(&publicK, hash, r, s);
+}
+
+void getSharedKey(uint8_t pubKx[], uint8_t pubKy[], uint8_t privK[])
+{
+	for(i=0; i<NUM_ECC_DIGITS; i++)
+	{
+		publicK.x[i] = pubKx[i];
+		publicK.y[i] = pubKy[i];
+	}
+	ecdh_shared_secret(sharedK, &publicK, privK, NULL);
 }

@@ -1,7 +1,7 @@
 from utils import *
 
 #Configura puerto serial
-configSerial('/dev/cu.usbserial-4')
+configSerial('/dev/cu.usbserial-7')
 
 mainPubKx = rxData(32)
 printData('mainPubKx:', mainPubKx)
@@ -27,14 +27,6 @@ publicKy = getVar(32, 'publicKy')
 printData('pubKy:', publicKy)
 txData(publicKy)
 
-array = []
-array.extend(publicKx)
-array.extend(publicKy)
-keyHash = arrayToBytes(array)
-ecc.getHash(keyHash, 64)
-keyHash = getVar(32, 'hashNum')
-printData('hash:', keyHash)
-
 ere = rxData(32)
 printData('ere:', ere)
 ese = rxData(32)
@@ -46,7 +38,6 @@ file.write(mainPubKy)
 file.write(privateK)
 file.write(publicKx)
 file.write(publicKy)
-file.write(keyHash)
 file.write(ere)
 file.write(ese)
 file.close()

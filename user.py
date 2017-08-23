@@ -1,5 +1,8 @@
 from utils import *
 
+#Configura puerto serial
+configSerial('/dev/cu.usbserial-7')
+
 file = open('CertUser','rb')
 
 array = []
@@ -41,13 +44,6 @@ array = []
 byte = file.read(32)
 for x in byte:
     array.append(x)
-keyHash = arrayToBytes(array)
-printData('keyHash:', keyHash)
-
-array = []
-byte = file.read(32)
-for x in byte:
-    array.append(x)
 ere = arrayToBytes(array)
 printData('ere:', ere)
 
@@ -58,42 +54,104 @@ for x in byte:
 ese = arrayToBytes(array)
 printData('ese:', ese)
 
-array = []
 #Cifra publicKx
+array = []
 ecc.setData(publicKx, 0, 16)
-ecc.encryptData(privateK)
+ecc.encryptData(mainPubKx)
 array.extend(getVar(16, 'data'))
 ecc.setData(publicKx, 16, 32)
-ecc.encryptData(privateK)
-array.extend(getVar(16, 'data'))
-#Cifra publicKx
-ecc.setData(publicKy, 0, 16)
-ecc.encryptData(privateK)
-array.extend(getVar(16, 'data'))
-ecc.setData(publicKy, 16, 32)
-ecc.encryptData(privateK)
-array.extend(getVar(16, 'data'))
-#Cifra hash
-ecc.setData(keyHash, 0, 16)
-ecc.encryptData(privateK)
-array.extend(getVar(16, 'data'))
-ecc.setData(keyHash, 16, 32)
-ecc.encryptData(privateK)
-array.extend(getVar(16, 'data'))
-#Cifra ere
-ecc.setData(ere, 0, 16)
-ecc.encryptData(privateK)
-array.extend(getVar(16, 'data'))
-ecc.setData(ere, 16, 32)
-ecc.encryptData(privateK)
-array.extend(getVar(16, 'data'))
-#Cifra ere
-ecc.setData(ese, 0, 16)
-ecc.encryptData(privateK)
-array.extend(getVar(16, 'data'))
-ecc.setData(ese, 16, 32)
-ecc.encryptData(privateK)
+ecc.encryptData(mainPubKx)
 array.extend(getVar(16, 'data'))
 encData = arrayToBytes(array)
+txData(encData)
 
-printData('encryptedData:', encData)
+#Cifra publicKy
+array = []
+ecc.setData(publicKy, 0, 16)
+ecc.encryptData(mainPubKx)
+array.extend(getVar(16, 'data'))
+ecc.setData(publicKy, 16, 32)
+ecc.encryptData(mainPubKx)
+array.extend(getVar(16, 'data'))
+encData = arrayToBytes(array)
+txData(encData)
+
+#Cifra ere
+array = []
+ecc.setData(ere, 0, 16)
+ecc.encryptData(mainPubKx)
+array.extend(getVar(16, 'data'))
+ecc.setData(ere, 16, 32)
+ecc.encryptData(mainPubKx)
+array.extend(getVar(16, 'data'))
+encData = arrayToBytes(array)
+txData(encData)
+
+#Cifra ese
+array = []
+ecc.setData(ese, 0, 16)
+ecc.encryptData(mainPubKx)
+array.extend(getVar(16, 'data'))
+ecc.setData(ese, 16, 32)
+ecc.encryptData(mainPubKx)
+array.extend(getVar(16, 'data'))
+encData = arrayToBytes(array)
+txData(encData)
+
+array = []
+encDataS = rxData(32)
+ecc.setData(encDataS, 0, 16)
+ecc.decryptData(mainPubKx)
+array.extend(getVar(16, 'data'))
+ecc.setData(encDataS, 16, 32)
+ecc.decryptData(mainPubKx)
+array.extend(getVar(16, 'data'))
+SpubKx = arrayToBytes(array)
+printData('SpubKx:', SpubKx)
+
+array = []
+encDataS = rxData(32)
+ecc.setData(encDataS, 0, 16)
+ecc.decryptData(mainPubKx)
+array.extend(getVar(16, 'data'))
+ecc.setData(encDataS, 16, 32)
+ecc.decryptData(mainPubKx)
+array.extend(getVar(16, 'data'))
+SpubKy = arrayToBytes(array)
+printData('SpubKy:', SpubKy)
+
+array = []
+encDataS = rxData(32)
+ecc.setData(encDataS, 0, 16)
+ecc.decryptData(mainPubKx)
+array.extend(getVar(16, 'data'))
+ecc.setData(encDataS, 16, 32)
+ecc.decryptData(mainPubKx)
+array.extend(getVar(16, 'data'))
+Sere = arrayToBytes(array)
+printData('Sere:', Sere)
+
+array = []
+encDataS = rxData(32)
+ecc.setData(encDataS, 0, 16)
+ecc.decryptData(mainPubKx)
+array.extend(getVar(16, 'data'))
+ecc.setData(encDataS, 16, 32)
+ecc.decryptData(mainPubKx)
+array.extend(getVar(16, 'data'))
+Sese = arrayToBytes(array)
+printData('Sese:', Sese)
+
+#Genera hash de la llave pública externa
+array = []
+array.extend(SpubKx)
+array.extend(SpubKy)
+keyHash = arrayToBytes(array)
+ecc.getHash(keyHash, 64)
+keyHash = getVar(32, 'hashNum')
+printData('hash:', keyHash)
+
+if ecc.verify(mainPubKx, mainPubKy, keyHash, Sere, Sese):
+    ecc.getSharedKey(SpubKx, SpubKy, privateK)
+    sharedKey = getVar(32, 'sharedK')
+    printData('Shared Key:', sharedKey)

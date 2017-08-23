@@ -22,12 +22,13 @@ def printData(nom, dat):
 def txData(data):
 	resp = b''
 	s.open()
-	while resp == b'':
+	while resp != b'ok':
 		s.flushOutput()
 		s.write(data)
-		time.sleep(0.1)
+		time.sleep(0.05)
 		s.flushInput()
 		resp = s.read(2)
+		time.sleep(0.05)
 	s.close()
 
 def rxData(num):
@@ -36,9 +37,10 @@ def rxData(num):
 	while resp == b'':
 		s.flushInput()
 		resp = s.read(num)
-		time.sleep(0.1)
+		time.sleep(0.05)
 		s.flushOutput()
 		s.write(b'ok')
+		time.sleep(0.05)
 	s.close()
 	return resp
 
